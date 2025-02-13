@@ -1,7 +1,7 @@
 from src.utils.shared.shared import shared_show_message_with_clear
 from src.utils.system_utils import execute_before
 from src.utils.style_outputs import ( 
-    print_interrupted_message, print_error_choosing_proxy, print_proxy_disconcerted,
+    print_interrupted_message, print_error_choosing_proxy, print_proxy_disconnected,
     print_error_connect_proxy, print_error_testing_proxy
 )
 
@@ -50,14 +50,13 @@ class ProxyManager():
                 
                 return self.chosen_city, self.chosen_proxy
             
-            shared_show_message_with_clear(lambda: print_proxy_disconcerted(self.chosen_city, self.chosen_proxy), print_error_connect_proxy(self.chosen_city))
+            shared_show_message_with_clear(lambda: print_proxy_disconnected(self.chosen_city, self.chosen_proxy), print_error_connect_proxy(self.chosen_city))
             sys.exit(1)
 
         except KeyboardInterrupt:
-                shared_show_message_with_clear(lambda: print_proxy_disconcerted(self.chosen_city, self.chosen_proxy), print_interrupted_message)
-                print_proxy_disconcerted(self.chosen_city, self.chosen_proxy)
+                shared_show_message_with_clear(lambda: print_proxy_disconnected(self.chosen_city, self.chosen_proxy), print_interrupted_message)
                 sys.exit(1)
 
         except Exception:
-            shared_show_message_with_clear(lambda: print_proxy_disconcerted(self.chosen_city, self.chosen_proxy), print_error_testing_proxy(self.chosen_city))
+            shared_show_message_with_clear(lambda: print_proxy_disconnected(self.chosen_city, self.chosen_proxy), print_error_testing_proxy(self.chosen_city))
             sys.exit(1)

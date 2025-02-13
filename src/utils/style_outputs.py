@@ -39,5 +39,5 @@ def print_error_testing_proxy(chosen_city) -> None:
 def print_proxy_online(chosen_city, chosen_proxy) -> None:
     print(f'\n{GREEN}•{RESET}{WHITE} Proxy: {chosen_city} | {chosen_proxy} (Online){RESET}')
 
-def print_proxy_disconcerted(chosen_city, chosen_proxy) -> None:
+def print_proxy_disconnected(chosen_city, chosen_proxy) -> None:
     print(f'\n{RED}•{RESET}{WHITE} Proxy: {chosen_city} | {chosen_proxy} (Disconcerted){RESET}')
