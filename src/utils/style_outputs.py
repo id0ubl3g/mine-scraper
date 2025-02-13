@@ -1,4 +1,4 @@
-from config.collors_config import WHITE, YELLOW, ORANGE, RED, GREEN, RESET, BOLD
+from config.colors_config import WHITE, YELLOW, ORANGE, RED, GREEN, RESET, BOLD
 
 def print_welcome_message() -> None:
     print(rf'''{GREEN}{BOLD}
