@@ -10,6 +10,13 @@ import os
 def clear_screen() -> None:
     os.system('clear')
 
+def create_file(filename: str, search_content: str) -> None:
+    os.makedirs('src/temp', exist_ok=True)
+    file_path = os.path.join('src/temp', f"{filename}.txt")
+    
+    with open(file_path, 'w') as file:
+        file.write(search_content)
+
 def execute_before(method_to_execute: Callable[[], None]) -> Callable[[], None]:
     def decorator(func: Callable[[], None]) -> Callable[[], None]:
         def wrapper(self, *args, **kwargs) -> None:

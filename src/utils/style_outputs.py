@@ -1,5 +1,10 @@
 from config.colors_config import WHITE, YELLOW, ORANGE, RED, GREEN, RESET, BOLD
 
+from itertools import cycle
+from time import sleep
+import threading
+import sys
+
 def print_welcome_message() -> None:
     print(rf'''{GREEN}{BOLD}
 8b   d8 w                .d88b.                               
@@ -8,7 +13,7 @@ def print_welcome_message() -> None:
 8     8 8 8   8 `Y88P    `Y88P' `Y8P 8    `Y88 88P' `Y88P 8   
                                                8             
 
-        {RESET}{WHITE}Powerful {GREEN}{BOLD}MineScraper{WHITE} for extracting and processing data.
+        {RESET}{WHITE}Web {GREEN}Scraping{WHITE} for data extraction and processing 
             {RESET}{GREEN}
     [*]__author__: {RESET}George Victor | @id0ubl3g{GREEN}
     [*]__github__: {RESET}github.com/id0ubl3g/mine-scraper{GREEN}
@@ -16,7 +21,7 @@ def print_welcome_message() -> None:
 
 def print_select_scraping_mode() -> None:
     print(f'\n{GREEN}[+]{RESET}{BOLD} Select a scraping mode:{RESET}\n')
-    print(f'{GREEN}[1]{RESET} Instagram: Collect emails, phone numbers and usernames from profiles')
+    print(f'{GREEN}[1]{RESET} Instagram: Collect emails and usernames from profiles')
 
 def print_interrupted_message() -> None:
     print(f'\n{ORANGE}[!]{RESET} Operation interrupted by user. Exiting gracefully...')
@@ -40,4 +45,16 @@ def print_proxy_online(chosen_city, chosen_proxy) -> None:
     print(f'\n{GREEN}•{RESET}{WHITE} Proxy: {chosen_city} | {chosen_proxy} (Online){RESET}')
 
 def print_proxy_disconnected(chosen_city, chosen_proxy) -> None:
-    print(f'\n{RED}•{RESET}{WHITE} Proxy: {chosen_city} | {chosen_proxy} (Disconcerted){RESET}')
+    print(f'\n{RED}•{RESET}{WHITE} Proxy: {chosen_city} | {chosen_proxy} (Disconnected){RESET}')
+
+def loading_animation(message: str, stop_event: threading.Event) -> None:
+    spinner = cycle(["|", "/", "-", "\\"])
+    
+    sys.stdout.write("\n")
+    while not stop_event.is_set():
+        sys.stdout.write(f"\r{GREEN}[→]{RESET} {message} {next(spinner)}")
+        sys.stdout.flush()
+        sleep(0.1)
+    
+    sys.stdout.write("\r" + " " * (len(message) + 10) + "\r")
+    sys.stdout.flush()

@@ -1,6 +1,6 @@
 from config.colors_config import BRIGHT_YELLOW, GREEN, RED, RESET, BOLD
 
-usage_mine_scraper = f"""{GREEN}{BOLD}MineScraper{RESET} - for extracting and processing data.
+usage_mine_scraper = f"""{GREEN}{BOLD}MineScraper{RESET} - Web scraping for data extraction and processing 
 GitHub: {GREEN}github.com/id0ubl3g/mine-scraper{RESET}
 
 {BRIGHT_YELLOW}Usage:{RESET}
