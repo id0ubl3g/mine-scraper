@@ -21,8 +21,15 @@ def print_welcome_message() -> None:
 
 def print_select_scraping_mode() -> None:
     print(f'\n{GREEN}[+]{RESET}{BOLD} Select a scraping mode:{RESET}\n')
-    print(f'{GREEN}[1]{RESET} Instagram: Collect emails and usernames from profiles')
+    print(f'{GREEN}[1]{RESET} Instagram: Scrape emails from pages')
+    print(f'{GREEN}[2]{RESET} Linkedin: Scrape emails from pages')
+    print(f'{GREEN}[3]{RESET} TikTok: Scrape emails from pages')
+    print(f'{GREEN}[0]{RESET} Exit: Exit the scraper')
 
+def print_exit_message() -> None:
+    print(f'\n{ORANGE}[!]{RESET} Exiting gracefully. Thank you for using the Mine Scraper!')
+    sleep(0.5)
+    
 def print_interrupted_message() -> None:
     print(f'\n{ORANGE}[!]{RESET} Operation interrupted by user. Exiting gracefully...')
 

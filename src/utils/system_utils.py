@@ -6,6 +6,7 @@ from typing import Callable
 import argparse
 import sys
 import os
+import re
 
 def clear_screen() -> None:
     os.system('clear')
@@ -14,8 +15,33 @@ def create_file(filename: str, search_content: str) -> None:
     os.makedirs('src/temp', exist_ok=True)
     file_path = os.path.join('src/temp', f"{filename}.txt")
     
-    with open(file_path, 'w') as file:
+    with open(file_path, 'w', encoding='utf-8') as file:
         file.write(search_content)
+
+def read_file(filename: str) -> str:
+    os.makedirs('src/temp', exist_ok=True)
+    file_path = os.path.join('src/temp', f"{filename}.txt")
+    
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return file.read()
+    
+def extract_emails(filename) -> list:
+    os.makedirs('src/temp', exist_ok=True)
+    file_path = os.path.join('src/temp', f"{filename}.txt")
+
+    with open(file_path, 'r', encoding='utf-8') as file:
+        content = file.read()
+    
+    email_pattern = r'\b[A-Za-z0-9][A-Za-z0-9._%+-]{0,63}@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b'
+    emails = re.findall(email_pattern, content)
+    
+    invalid_suffixes = ('.Watch', '.Xem', '.Schau', '.Mira')
+    cleaned_emails = [email.rsplit('.', 1)[0] if email.endswith(invalid_suffixes) else email for email in emails]
+
+
+    unique_emails = sorted(set(cleaned_emails))
+
+    return unique_emails
 
 def execute_before(method_to_execute: Callable[[], None]) -> Callable[[], None]:
     def decorator(func: Callable[[], None]) -> Callable[[], None]:

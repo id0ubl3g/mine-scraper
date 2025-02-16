@@ -2,14 +2,14 @@ from src.modules.proxy_manager import ProxyManager
 from src.modules.get_info import GetInfo
 
 from src.utils.shared.shared import shared_show_message_with_clear
-from src.utils.system_utils import execute_before, create_file
+from src.utils.system_utils import execute_before, create_file, read_file, extract_emails
 from src.utils.style_outputs import (
     print_proxy_online, print_select_scraping_mode, print_invalid_value,
     print_proxy_disconnected, print_interrupted_message, print_error_unexpected,
-    loading_animation
+    loading_animation, print_exit_message
 )
 
-from config.dorks_config import dorks_instagram
+from config.dorks_config import dorks_instagram, dorks_linkedin, dorks_tiktok
 from config.colors_config import GREEN, RESET
 
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
@@ -37,19 +37,9 @@ class MineScraper:
 
         self.choice_scraping_mode: str = None
 
-        self.dork_instagram_gmail: str = None
-        self.dork_instagram_outlook: str = None
-        self.dork_instagram_yahoo: str = None
-        self.dork_instagram_icloud: str = None
-        self.dork_instagram_protonmail: str = None
-        self.dork_instagram_aol: str = None
-        self.dork_instagram_yandex: str = None
-        self.dork_instagram_mail: str = None
-        self.dork_instagram_gmx: str = None
-
         self.search_content: str = None
 
-        self.unique_id: str = None
+        self.dorks: list = []
 
     def _initialize_driver(self, localhost: bool) -> None:
         if not localhost:
@@ -83,18 +73,48 @@ class MineScraper:
     def pull_scraping_mode(self) -> None:
         match self.choice_scraping_mode:
             case 1:
-                self.dork_instagram_gmail = dorks_instagram['dork_instagram_gmail']
-                self.dork_instagram_outlook = dorks_instagram['dork_instagram_outlook']
-                self.dork_instagram_yahoo = dorks_instagram['dork_instagram_yahoo']
-                self.dork_instagram_icloud = dorks_instagram['dork_instagram_icloud']
-                self.dork_instagram_protonmail = dorks_instagram['dork_instagram_protonmail']
-                self.dork_instagram_aol = dorks_instagram['dork_instagram_aol']
-                self.dork_instagram_yandex = dorks_instagram['dork_instagram_yandex']
-                self.dork_instagram_mail = dorks_instagram['dork_instagram_mail']
-                self.dork_instagram_gmx = dorks_instagram['dork_instagram_gmx']
+                self.dorks = ['dork_instagram_gmail', 
+                                'dork_instagram_outlook', 
+                                'dork_instagram_yahoo', 
+                                'dork_instagram_icloud', 
+                                'dork_instagram_protonmail', 
+                                'dork_instagram_aol', 
+                                'dork_instagram_yandex',
+                                'dork_instagram_mail',
+                                'dork_instagram_gmx']
+                
+                shared_show_message_with_clear(lambda: print_proxy_online(self.chosen_city, self.chosen_proxy))
 
+            case 2:
+                self.dorks = ['dorks_linkedin_gmail',
+                                'dorks_linkedin_outlook',
+                                'dorks_linkedin_yahoo',
+                                'dorks_linkedin_icloud',
+                                'dorks_linkedin_protonmail',
+                                'dorks_linkedin_aol',
+                                'dorks_linkedin_yandex',
+                                'dorks_linkedin_mail',
+                                'dorks_linkedin_gmx']
+                
+                shared_show_message_with_clear(lambda: print_proxy_online(self.chosen_city, self.chosen_proxy))
+
+            case 3:
+                self.dorks = ['dorks_tiktok_gmail', 
+                                'dorks_tiktok_outlook', 
+                                'dorks_tiktok_yahoo', 
+                                'dorks_tiktok_icloud', 
+                                'dorks_tiktok_protonmail', 
+                                'dorks_tiktok_aol', 
+                                'dorks_tiktok_yandex',
+                                'dorks_tiktok_mail',
+                                'dorks_tiktok_gmx']
+                                
                 shared_show_message_with_clear(lambda: print_proxy_online(self.chosen_city, self.chosen_proxy))
             
+            case 0:
+                shared_show_message_with_clear(lambda: print_proxy_disconnected(self.chosen_city, self.chosen_proxy), print_exit_message)
+                sys.exit(0)
+
             case _:
                 shared_show_message_with_clear(lambda: print_proxy_online(self.chosen_city, self.chosen_proxy), lambda: print_invalid_value(self.choice_scraping_mode))
                 self.pull_scraping_mode()
@@ -129,13 +149,29 @@ class MineScraper:
         
         return
     
-    def data_scraping(self, dork_attr):
-        dork_query = getattr(self, dork_attr, None)
+    def data_scraping(self, dork_name: str) -> None:
+        match self.choice_scraping_mode:
+            case 1:
+                dork_query = dorks_instagram[dork_name]
+
+            case 2:
+                dork_query = dorks_linkedin[dork_name]
+
+            case 3:
+                dork_query = dorks_tiktok[dork_name]
 
         self.get_data()
         self.search_element(self.element_search_bar_xpath, dork_query)
         self.click_until_disappear()
-        self.save_all_search_content_temp(dork_attr)
+        self.save_all_search_content_temp(dork_name)
+
+        return
+
+    def data_building(self, dork_name: str) -> None:
+        emails = extract_emails(dork_name)
+        create_file(dork_name, "\n".join(emails))
+        
+        return
     
     def execute(self) -> None:
             stop_event = threading.Event()
@@ -144,18 +180,14 @@ class MineScraper:
             try:
                 self.pull_scraping_mode()
 
-                loading_thread = threading.Thread(target=loading_animation, args=("Scraping data", stop_event))
+                loading_thread = threading.Thread(target=loading_animation, args=("Scraping and Building data", stop_event))
                 loading_thread.start()
                 
-                self.data_scraping('dork_instagram_gmail')
-                # self.data_scraping('dork_instagram_outlook')
-                # self.data_scraping('dork_instagram_yahoo')
-                # self.data_scraping('dork_instagram_icloud')
-                # self.data_scraping('dork_instagram_protonmail')
-                # self.data_scraping('dork_instagram_aol')
-                # self.data_scraping('dork_instagram_yandex')
-                # self.data_scraping('dork_instagram_mail')
-                # self.data_scraping('dork_instagram_gmx')
+                for dork_name in self.dorks:
+                    self.data_scraping(dork_name)
+                    self.data_building(dork_name)
+
+                shared_show_message_with_clear(lambda: print_proxy_online(self.chosen_city, self.chosen_proxy))
             
             except KeyboardInterrupt:
                 shared_show_message_with_clear(lambda: print_proxy_disconnected(self.chosen_city, self.chosen_proxy), print_interrupted_message)
@@ -169,7 +201,7 @@ class MineScraper:
             
             finally:
                 if loading_thread is not None:
-                    stop_event.set()  
+                    stop_event.set()
                     loading_thread.join()
                 
                 self.driver.quit()
