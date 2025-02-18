@@ -1,8 +1,9 @@
 from src.modules.proxy_manager import ProxyManager
 from src.modules.get_info import GetInfo
+from src.modules.export_data import ExportData
 
 from src.utils.shared.shared import shared_show_message_with_clear
-from src.utils.system_utils import execute_before, create_file, read_file, extract_emails
+from src.utils.system_utils import execute_before, create_file, extract_emails, delete_files_temp
 from src.utils.style_outputs import (
     print_proxy_online, print_select_scraping_mode, print_invalid_value,
     print_proxy_disconnected, print_interrupted_message, print_error_unexpected,
@@ -38,6 +39,10 @@ class MineScraper:
         self.choice_scraping_mode: str = None
 
         self.search_content: str = None
+
+        self.name_export: str = None
+
+        self.socialmedia_platform: str = None
 
         self.dorks: list = []
 
@@ -153,12 +158,18 @@ class MineScraper:
         match self.choice_scraping_mode:
             case 1:
                 dork_query = dorks_instagram[dork_name]
+                self.name_export = 'emails_data_instagram'
+                self.socialmedia_platform = 'instagram'
 
             case 2:
                 dork_query = dorks_linkedin[dork_name]
+                self.name_export = 'emails_data_linkedin'
+                self.socialmedia_platform = 'linkedin'
 
             case 3:
                 dork_query = dorks_tiktok[dork_name]
+                self.name_export = 'emails_data_tiktok'
+                self.socialmedia_platform = 'tiktok'
 
         self.get_data()
         self.search_element(self.element_search_bar_xpath, dork_query)
@@ -187,6 +198,8 @@ class MineScraper:
                     self.data_scraping(dork_name)
                     self.data_building(dork_name)
 
+                ExportData().export_to_excel(self.name_export, self.socialmedia_platform)
+
                 shared_show_message_with_clear(lambda: print_proxy_online(self.chosen_city, self.chosen_proxy))
             
             except KeyboardInterrupt:
@@ -204,4 +217,5 @@ class MineScraper:
                     stop_event.set()
                     loading_thread.join()
                 
+                delete_files_temp()
                 self.driver.quit()

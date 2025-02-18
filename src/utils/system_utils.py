@@ -17,13 +17,6 @@ def create_file(filename: str, search_content: str) -> None:
     
     with open(file_path, 'w', encoding='utf-8') as file:
         file.write(search_content)
-
-def read_file(filename: str) -> str:
-    os.makedirs('src/temp', exist_ok=True)
-    file_path = os.path.join('src/temp', f"{filename}.txt")
-    
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return file.read()
     
 def extract_emails(filename) -> list:
     os.makedirs('src/temp', exist_ok=True)
@@ -42,6 +35,14 @@ def extract_emails(filename) -> list:
     unique_emails = sorted(set(cleaned_emails))
 
     return unique_emails
+
+def delete_files_temp() -> None:
+    for file in os.listdir('src/temp'):
+        file_path = os.path.join('src/temp', file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
+    return
 
 def execute_before(method_to_execute: Callable[[], None]) -> Callable[[], None]:
     def decorator(func: Callable[[], None]) -> Callable[[], None]:

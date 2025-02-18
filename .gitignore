@@ -5,6 +5,7 @@ __pycache__/
 .venv
 
 # Database
+exports/
 temp/
 
 # Ignore the test folder
