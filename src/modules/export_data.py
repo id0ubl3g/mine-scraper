@@ -34,7 +34,7 @@ class ExportData:
         })
 
         os.makedirs(self.export_path, exist_ok=True)
-        output_export_path = os.path.join(self.export_path, f'{filename}.xlsx')
+        output_export_path = os.path.join(self.export_path, f'{filename}_{current_date}_{current_time}_minescraper.xlsx')
         dataframe.to_excel(output_export_path, index=False, engine='openpyxl')
         
         return

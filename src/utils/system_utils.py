@@ -37,6 +37,7 @@ def extract_emails(filename) -> list:
     return unique_emails
 
 def delete_files_temp() -> None:
+    os.makedirs('src/temp', exist_ok=True)
     for file in os.listdir('src/temp'):
         file_path = os.path.join('src/temp', file)
         if os.path.isfile(file_path):

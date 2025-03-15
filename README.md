@@ -15,6 +15,7 @@
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)  
     - [Setting Up `venv`](#setting-up-venv)  
+    - [Install `google chrome`](#install-google-chrome)
     - [Dorks Configuration](#dorks-configuration)  
     - [Proxies Configuration](#proxies-configuration)  
 - [Getting Started](#getting-started)
@@ -81,6 +82,11 @@ sudo apt install python3 python3-venv
 
 For additional information, visit the official Python website: [Download Python](https://www.python.org/downloads/)
 
+### Install `google chrome`
+
+To use Selenium effectively, you need Google Chrome installed on your system.
+Download the latest: [Download Google Chrome](https://www.google.com/chrome/what-you-make-of-it/)
+
 ### Dorks Configuration
 
 The `dorks_config.py` file allows customization of dorks for web scraping. It is located at:
@@ -131,13 +137,13 @@ python3 run.py --localhost <True/False>
 
 - --**`localhost False`**: When you pass False, the scraper will use the proxies defined in the config/proxies_config.py file. This helps avoid blocks or limitations when making too many requests from a single origin.
 
-After running the scraper, the extracted data will be automatically saved in the exports/ directory in CSV format.
+After running the scraper, the extracted data will be automatically saved in the exports/ directory in XLSX format.
 Example of the expected output:
 
 ```plaintext
 └── mine-scraper/
     ├── exports/
-    │   └── emails_data_socialmedia.csv
+    │   └── filename_date_time_minescraper.xlsx
 ```
 
 To display the help message with available options, use:
